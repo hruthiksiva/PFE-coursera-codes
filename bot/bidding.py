@@ -1,7 +1,9 @@
 import time
+import names
 from pytimedinput import timedInput
 import pandas as pd
 import random
+
 
 Global_dict={'User':[], 'Bid_Amount':[] }
 
@@ -15,15 +17,15 @@ def get_other_user_details():
 def generate_bots():
     name=[]
     for i in range(0,9):
-        k='bot'+str(i)
+        k=names.get_full_name()
         name.append(k)
     return name
 
 
 
 
-def bid_taken(names, price=10000):
-    Global_dict['User'].append(names)
+def bid_taken(name_list, price=10000):
+    Global_dict['User'].append(name_list)
     Global_dict['Bid_Amount'].append(price)
     return
 
@@ -50,7 +52,6 @@ x =  new_user()
 
 x.pint()
 '''
-i=0
 df=pd.DataFrame()
 df['User']=['S']
 df['Bid_amount']=['Y']
@@ -58,12 +59,13 @@ df.to_csv('Trail.csv')
 #pd.DataFrame(columns=['User', 'Bid_amount']).to_csv('Trail.csv') #Here new table will be created in the database
 bots = generate_bots()
 user_name=input('Enter your name:  ')
-names=[]
+name_list=[]
 for f in bots:
-    names.append(f)
-names.append(user_name)
+    name_list.append(f)
+name_list.append(user_name)
 Move=False
-bid_not_taken=names
+bid_not_taken=name_list
+i=0
 while True:
     m=1
     if i>=10:
@@ -71,7 +73,7 @@ while True:
     Move_to=i
     if i!=0:
         
-        print('Current Bid is: ', i)
+        print('Current Bid Month is: ', i)
         print('Remaining Bids are as follows')
         for k in range(i, 10):
             print(k, ' Month bid')
@@ -131,5 +133,8 @@ while True:
 
     i+=m
 
+named_tuple = time.localtime() # get struct_time
+time_string = time.strftime("%m-%d-%Y-%H-%M-%S", named_tuple)
+finalouput='Trail '+time_string+'.csv'
+pd.DataFrame.from_dict(Global_dict).to_csv(finalouput)
 
-pd.DataFrame.from_dict(Global_dict).to_csv('Trail.csv')
